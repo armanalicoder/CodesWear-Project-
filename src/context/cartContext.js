@@ -62,7 +62,6 @@ export function CartProvider({ children }) {
     if (itemcode in cart) {
       newCart[itemcode].qty = cart[itemcode].qty - 1;
     }
-    console.log(newCart)
     if (newCart[itemcode].qty <= 0) {
       delete newCart[itemcode];
     }

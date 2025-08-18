@@ -6,6 +6,7 @@ import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import Image from "next/image";
 function Forgot() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -46,10 +47,12 @@ function Forgot() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
+        <Image
           src="/logo.png"
-          alt="Your Company"
+          alt="codeswear"
           className="mx-auto h-10 w-auto"
+          width={200}
+          height={50}
         />
         <h2 className="text-center text-2xl/9 font-bold">
           Forgot your password

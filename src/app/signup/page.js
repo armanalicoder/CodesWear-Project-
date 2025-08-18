@@ -5,12 +5,13 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/authContext";
 import { CircularProgress } from "@mui/material";
+import Image from "next/image";
 
 function Signup() {
   const router = useRouter();
   const { isLoggedIn, setIsLoggedIn } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [errors,setError] = useState({})
+  const [errors, setError] = useState({});
   useEffect(() => {
     if (isLoggedIn) {
       toast.success("You have already logged in");
@@ -23,57 +24,58 @@ function Signup() {
     email: "",
     password: "",
   });
-  let errorObj = {}
+  let errorObj = {};
   const validate = () => {
     // Name validation (only alphabets, min 3 chars)
     if (!formData.name.trim()) {
-      errorObj.name="Name is Required!"
+      errorObj.name = "Name is Required!";
     } else if (!/^[A-Za-z\s]{3,}$/.test(formData.name)) {
-      errorObj.name="Enter a valid name (min 3 letters)";
+      errorObj.name = "Enter a valid name (min 3 letters)";
     }
     // Email validation
     if (!formData.email) {
-     errorObj.email="Email is required"
+      errorObj.email = "Email is required";
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
     ) {
-      errorObj.email="Invalid email address";
+      errorObj.email = "Invalid email address";
     }
 
-     // Password validation (min 6 chars, at least 1 number)
+    // Password validation (min 6 chars, at least 1 number)
     if (!formData.password) {
-      errorObj.password="Password is required"
+      errorObj.password = "Password is required";
     } else if (!/^(?=.*[0-9]).{6,}$/.test(formData.password)) {
-      errorObj.password="Password must be at least 6 chars & include a number";
+      errorObj.password =
+        "Password must be at least 6 chars & include a number";
     }
-    setError(errorObj)
-    return Object.keys(errorObj).length===0;
+    setError(errorObj);
+    return Object.keys(errorObj).length === 0;
   };
 
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      if(validate()){
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-      const data = await res.json();
-      if (data.exist) {
-        toast.error("You have already an account Please Login");
-        router.push("/login");
+      if (validate()) {
+        const res = await fetch("/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+        const data = await res.json();
+        if (data.exist) {
+          toast.error("You have already an account Please Login");
+          router.push("/login");
+        }
+        if (data.Save) {
+          toast.success("Signup Successfully Please Login");
+          router.push("/login");
+        }
       }
-      if (data.Save) {
-        toast.success("Signup Successfully Please Login");
-        router.push("/login");
-      }
-    }
     } catch (err) {
       console.log(err);
     } finally {
@@ -83,10 +85,12 @@ function Signup() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
+        <Image
           src="/logo.png"
-          alt="Your Company"
+          alt="codeswear"
           className="mx-auto h-10 w-auto"
+          width={200}
+          height={50}
         />
         <h2 className="text-center text-2xl/9 font-bold">
           Signup to your account
@@ -117,9 +121,10 @@ function Signup() {
                 placeholder="Enter Full Name"
                 className="block w-full rounded-md px-3 py-1.5 text-base border "
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name}</p>
+              )}
             </div>
-            
           </div>
           <div>
             <label htmlFor="email" className="block text-sm/6 font-medium">
@@ -139,7 +144,9 @@ function Signup() {
                 placeholder="Enter Your Email Id"
                 className="block w-full rounded-md px-3 py-1.5 text-base border "
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
             </div>
           </div>
 
@@ -163,7 +170,9 @@ function Signup() {
                 autoComplete="current-password"
                 className="block w-full rounded-md px-3 py-1.5 text-base border "
               />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
           </div>
           <div>

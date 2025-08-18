@@ -11,7 +11,6 @@ export async function POST(req) {
   try {
     // Verify token
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(decoded)
     const user = await User.findById(decoded.id);
 
     if (!user) {

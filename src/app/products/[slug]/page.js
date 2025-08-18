@@ -23,7 +23,6 @@ function Product() {
   const checkPincodeService = async () => {
     const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
     const data = await res.json();
-    console.log(data);
     if (data[0].Status == "Success") {
       setServicable(true);
       toast.success("Yay! We Deliver to this pincode");
@@ -53,7 +52,7 @@ function Product() {
       }
     }
     getData(slug);
-  }, []);
+  }, [slug]);
 
   const refreshVarient = (newSize, newColor) => {
     let url = `${process.env.NEXT_PUBLIC_HOST}/products/${varients[newColor][newSize]["slug"]}`;
@@ -317,7 +316,6 @@ function Product() {
               >
                 Add to Cart
               </button>
-              {console.log(user)}
               <button
                 disabled={product?.avlQty == 0}
                 onClick={() => {

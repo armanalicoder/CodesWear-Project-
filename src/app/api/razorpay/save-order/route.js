@@ -12,13 +12,10 @@ export async function POST(request) {
     // Save the order
     const newOrder = new Order(data);
     await newOrder.save();
-    console.log(data.address);
-    console.log(data.email)
 
     //Save User Address to thier Profile
     const user = await User.findOneAndUpdate({email : data.address.email},{$set : {address : data.address}})
     await user.save();
-    console.log(user)
 
     // Decrease the quantity for each product
     const products = data.products; // already an object { slug: {qty, ...} }

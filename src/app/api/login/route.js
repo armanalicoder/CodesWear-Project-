@@ -17,7 +17,6 @@ export async function POST(request) {
         userData.password,
         existUser.password
       );
-      console.log(userData.password)
       if (isValid) {
         const token = jwt.sign({ id: existUser._id, name : existUser.name, email : existUser.email, }, process.env.SECRET_KEY, {
           expiresIn: 3 * 24 * 60 * 60, //3 days

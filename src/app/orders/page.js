@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { CircularProgress } from "@mui/material";
@@ -34,7 +35,7 @@ function Orders() {
     toast.error("You are not logged in.")
     router.push("/")
   }
-  }, []);
+  }, [user]);
   return (
     <>
       {user ? (
@@ -81,10 +82,12 @@ function Orders() {
                         className="flex flex-col sm:flex-row gap-4 mb-3"
                       >
                         <div className="flex-shrink-0">
-                          <img
+                          <Image
                             src={order.products[item].img}
                             alt="Product"
                             className="w-28 h-28 rounded-md"
+                            width={80}
+                            height={20}
                           />
                         </div>
 

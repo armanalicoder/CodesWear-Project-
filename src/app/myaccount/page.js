@@ -14,15 +14,6 @@ function MyAccount() {
     newpassword: "",
     confirmpassword: "",
   });
-  const fetchMyData = async () => {
-    const res = await fetch(`/api/myaccount/${user?.id}`);
-    const data = await res.json();
-    if (data.success) {
-      setFormData(data.address);
-    } else {
-      toast.error(data.message);
-    }
-  };
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -92,13 +83,26 @@ function MyAccount() {
   };
 
   useEffect(() => {
+    const fetchMyData = async () => {
+      try {
+        const res = await fetch(`/api/myaccount/${user?.id}`);
+        const data = await res.json();
+        if (data.success) {
+          setFormData(data.address);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
     if (user) {
       fetchMyData();
     } else {
       toast.error("You are not Logged in.");
       router.push("/");
     }
-  }, []);
+  }, [user]);
   return (
     <>
       {user ? (
@@ -138,7 +142,7 @@ function MyAccount() {
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium "
                 >
-                  Email*(Can't Update)
+                  Email<span>*(Can't Update)</span>
                 </label>
                 <input
                   value={user?.email}
@@ -369,7 +373,7 @@ function MyAccount() {
         </div>
       ) : (
         <div className="my-2 flex justify-center">
-          <CircularProgress style={{color : "#cc0dd6"}} />
+          <CircularProgress style={{ color: "#cc0dd6" }} />
         </div>
       )}
     </>

@@ -56,7 +56,6 @@ export default function CheckoutButton({
               body: JSON.stringify(response),
             });
             const verifyData = await verifyRes.json();
-            console.log(verifyData);
             if (verifyData.success) {
               await fetch("/api/razorpay/save-order", {
                 method: "POST",

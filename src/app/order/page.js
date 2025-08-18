@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/authContext";
+import Image from "next/image";
 function Order() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
@@ -33,16 +34,16 @@ function Order() {
         setIsLoading(false);
       }
     };
-    if(user){
+    if (user) {
       fetchOrder();
-    }else{
-      toast.error("you are not logged in")
-      router.push("/")
+    } else {
+      toast.error("you are not logged in");
+      router.push("/");
     }
-  }, []);
+  }, [user,orderid]);
   return (
     <div className="flex items-center justify-center p-4">
-      {order != null && (
+      {order != null ? (
         <div className="w-full max-w-5xl bg-white shadow-lg rounded-2xl p-6 md:p-10">
           {/* Title */}
           <h2 className="text-2xl font-bold text-pink-600 mb-6">
@@ -111,10 +112,12 @@ function Order() {
                       className="flex items-center justify-between border-b py-4"
                     >
                       <div className="flex items-center gap-4">
-                        <img
+                        <Image
                           src={products[item].img}
                           alt="item"
-                          className="w-16 h-16 rounded-lg object-cover"
+                          className="rounded-lg object-cover"
+                          width={80}
+                          height={16}
                         />
                         <div>
                           <p className="font-medium text-sm">
@@ -154,7 +157,7 @@ function Order() {
             </a>
           </div>
         </div>
-      )}
+      ) : <p className="text-center">Loading..</p>}
     </div>
   );
 }

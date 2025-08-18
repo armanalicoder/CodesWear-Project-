@@ -15,73 +15,82 @@ function Checkout() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [city, setCity] = useState(null);
   const [State, setState] = useState(null);
-  const { cart, clearCart, addToCart, removeItemFromCart, subTotal } =
-    useCart();
+  const { cart, addToCart, removeItemFromCart, subTotal } = useCart();
 
   const [formData, setFormData] = useState({
     name: "",
-    email: user?.email,
+    email: "",
     number: "",
     address: "",
     city: city,
     state: State,
     pincode: "",
   });
-
-  const fetchPincodeData = async () => {
-    const res = await fetch(
-      `https://api.postalpincode.in/pincode/${formData.pincode}`
-    );
-    const data = await res.json();
-    if (data[0].Status == "Success") {
-      setCity(data[0].PostOffice[0].District);
-      setState(data[0].PostOffice[0].State);
-      setFormData((prev) => ({
-        ...prev,
-        city: data[0].PostOffice[0].District,
-        state: data[0].PostOffice[0].State,
-      }));
-    } else {
-      window.alert("Invalid Pincode!");
-      setFormData({
-        name: "",
-        email: user?.email,
-        number: "",
-        address: "",
-        city: "",
-        state: "",
-        pincode: "",
-      });
-    }
-  };
-
-  const fetchUserData = async () => {
-      const res = await fetch(`/api/myaccount/${user?.id}`);
-      const data = await res.json();
-      if (data.success) {
-        setFormData(data.address);
-      } else {
-        toast.error(data.message);
-      }
-    };
-    useEffect(()=>{
-      fetchUserData();
-    },[])
-
   useEffect(() => {
-    if(!user){
+    if (!user) {
       router.push("/login");
     }
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch(`/api/myaccount/${user?.id}`);
+        const data = await res.json();
+        if (data.success) {
+          setFormData(data.address);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUserData();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchPincodeData = async () => {
+      if (formData.pincode.length == 6) {
+         console.log("Pincode render");
+        try {
+          const res = await fetch(
+            `https://api.postalpincode.in/pincode/${formData.pincode}`
+          );
+          const data = await res.json();
+          if (data[0].Status == "Success") {
+            setCity(data[0].PostOffice[0].District);
+            setState(data[0].PostOffice[0].State);
+            setFormData((prev) => ({
+              ...prev,
+              city: data[0].PostOffice[0].District,
+              state: data[0].PostOffice[0].State,
+            }));
+          } else {
+            window.alert("Invalid Pincode!");
+            setFormData({
+              name: "",
+              email: user?.email,
+              number: "",
+              address: "",
+              city: "",
+              state: "",
+              pincode: "",
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+        
+      }
+    };
     const { name, number, address, pincode } = formData;
     if (name && email && number && address && pincode) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
-    if (formData.pincode.length == 6) {
-      fetchPincodeData();
+    if(formData.pincode.length==6){
+    fetchPincodeData();
     }
-  }, [formData]);
+  }, [formData.pincode]);
   return (
     <>
       {user ? (
@@ -118,7 +127,7 @@ function Checkout() {
                 Email
               </label>
               <input
-                value={formData.email}
+                value={user.email}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
