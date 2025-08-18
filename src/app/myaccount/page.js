@@ -142,7 +142,7 @@ function MyAccount() {
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium "
                 >
-                  Email<span className="text-xs">*Can't Update</span>
+                  Email
                 </label>
                 <input
                   value={user?.email}
