@@ -1,18 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import { useAuth } from "@/context/authContext";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-export default function ResetPassword() {
+export default function ResetPassword({searchParams}) {
   const router = useRouter();
   const { user } = useAuth();
   const [newPassword, setNewPassword] = useState("");
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
-  const token = searchParams.get("token");
+  const token = searchParams.token;
 
   const handleSubmit = async (e) => {
     setLoading(true);

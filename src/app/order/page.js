@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/authContext";
 import Image from "next/image";
-function Order() {
+function Order({searchParams }) {
   const { user } = useAuth();
-  const searchParams = useSearchParams();
-  const orderid = searchParams.get("order_id");
+  const orderid = searchParams.order_id;
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState();
