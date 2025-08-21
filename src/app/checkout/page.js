@@ -16,10 +16,9 @@ function Checkout() {
   const [city, setCity] = useState(null);
   const [State, setState] = useState(null);
   const { cart, addToCart, removeItemFromCart, subTotal } = useCart();
-
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    email : user?.email,
     number: "",
     address: "",
     city: city,
@@ -36,8 +35,6 @@ function Checkout() {
         const data = await res.json();
         if (data.success) {
           setFormData(data.address);
-        } else {
-          toast.error(data.message);
         }
       } catch (err) {
         console.error(err);
@@ -49,7 +46,6 @@ function Checkout() {
   useEffect(() => {
     const fetchPincodeData = async () => {
       if (formData.pincode.length == 6) {
-         console.log("Pincode render");
         try {
           const res = await fetch(
             `https://api.postalpincode.in/pincode/${formData.pincode}`
@@ -81,9 +77,10 @@ function Checkout() {
         
       }
     };
-    const { name, number, address, pincode } = formData;
+    const { name,email, number, address, pincode } = formData;
     if (name && email && number && address && pincode) {
       setIsDisabled(false);
+      formData.email = user?.email;
     } else {
       setIsDisabled(true);
     }
@@ -127,10 +124,7 @@ function Checkout() {
                 Email
               </label>
               <input
-                value={user.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                value={user?.email}
                 type="email"
                 id="email"
                 className="border border-gray-300  text-sm rounded-lg block w-full p-2.5  "

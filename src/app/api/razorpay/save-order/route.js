@@ -5,18 +5,29 @@ import Product from "@/models/Product";
 import User from "@/models/User";
 
 export async function POST(request) {
-  try {
-    await connectDB();
-    const data = await request.json();
+  await connectDB();
+  const data = await request.json();
 
-    // Save the order
+  // Save the order
+  try {
     const newOrder = new Order(data);
     await newOrder.save();
-
+    // return NextResponse.json({success : true,message : "Order Saved"})
+  } catch (err) {
+    return NextResponse.json({ success: false, message: err });
+  }
+  try {
     //Save User Address to thier Profile
-    const user = await User.findOneAndUpdate({email : data.address.email},{$set : {address : data.address}})
+    const user = await User.findOneAndUpdate(
+      { email: data.address.email },
+      { $set: { address: data.address } }
+    );
     await user.save();
+  } catch (err) {
+    return NextResponse.json({ success: false, message: err });
+  }
 
+  try {
     // Decrease the quantity for each product
     const products = data.products; // already an object { slug: {qty, ...} }
 
@@ -33,11 +44,8 @@ export async function POST(request) {
         );
       }
     }
-
-    return NextResponse.json({ success: true, message: "Order saved" });
-  } catch (error) {
-    console.error("Error while placing order:", error);
-    return NextResponse.json({ success: false, message: error.message });
+  } catch (err) {
+    return NextResponse.json({ success: false, message: err });
   }
+  return NextResponse.json({ success: true, message: "Order saved" });
 }
-

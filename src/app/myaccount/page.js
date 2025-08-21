@@ -363,7 +363,7 @@ function MyAccount() {
                   disabled={loading}
                   className={`${
                     loading ? "bg-pink-300" : "bg-pink-500"
-                  } p-2 rounded text-white`}
+                  } p-2 rounded text-white cursor-pointer`}
                 >
                   Update Password
                 </button>

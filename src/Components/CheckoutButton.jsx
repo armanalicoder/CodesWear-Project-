@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useCart } from "@/context/cartContext";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutButton({
   amount,
@@ -13,6 +14,7 @@ export default function CheckoutButton({
   setIsDisabled,
   formData,
 }) {
+  const router = useRouter();
   const { cart } = useCart();
   const [loading, setLoading] = useState(false);
   const startPayment = async () => {
@@ -74,7 +76,7 @@ export default function CheckoutButton({
               });
               toast.success("Payment Done ! Wait Redirecting...");
               setLoading(false)
-              window.location.href = `/order?order_id=${order.id}`;
+              router.push(`/order?order_id=${order.id}`);
             } else {
               alert("Payment verification failed");
             }
