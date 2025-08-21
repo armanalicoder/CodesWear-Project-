@@ -37,7 +37,6 @@ export default function ResetPassword({searchParams}) {
   // }, [user]);
   return (
     <>
-      {user && (
         <form onSubmit={handleSubmit} className="p-4 max-w-md mx-auto">
           <h2 className="text-xl font-bold mb-2">Reset Password</h2>
           {loading && (
@@ -56,7 +55,6 @@ export default function ResetPassword({searchParams}) {
             Reset Password
           </button>
         </form>
-      )}
     </>
   );
 }
