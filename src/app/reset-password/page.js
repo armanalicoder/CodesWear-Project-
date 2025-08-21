@@ -29,12 +29,12 @@ export default function ResetPassword({searchParams}) {
       console.error(err);
     }
   };
-  useEffect(() => {
-    if (!user) {
-      toast.error("you are not logged in");
-      router.push("/");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     toast.error("you are not logged in");
+  //     router.push("/");
+  //   }
+  // }, [user]);
   return (
     <>
       {user && (
